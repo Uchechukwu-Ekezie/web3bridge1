@@ -1,0 +1,36 @@
+Co-working Space Booking System
+A simple desk booking system for a co-working space. Built using React.js and styled with Tailwind CSS.
+
+Features
+Book desks for individual work or team collaboration.
+Membership tiers:
+Basic: ₦750/hour
+Premium: ₦1,125/hour
+Executive: ₦1,500/hour
+Team desks: ₦1,875/hour (fixed price).
+10% discount for bookings over 3 hours.
+Prevents double booking by marking desks as reserved.
+Displays total cost upon booking.
+Getting Started
+1. Install Dependencies
+Run the following command to install all dependencies:
+
+bash
+Copy code
+npm install  
+2. Start the Application
+Start the app with:
+
+bash
+Copy code
+npm start  
+Access the app at http://localhost:3000.
+
+How to Use
+Select a membership tier and enter the number of hours.
+Confirm your booking to see the total cost.
+Reserved desks will be marked as unavailable.
+Tech Stack
+React.js
+Tailwind CSS
+Enjoy! 😊
