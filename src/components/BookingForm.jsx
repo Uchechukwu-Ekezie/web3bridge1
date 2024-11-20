@@ -10,7 +10,7 @@ const BookingForm = ({ onConfirm }) => {
     let total = prices[membership] * hours;
 
     if (hours > 3) {
-      total *= 0.9; // 10% discount
+      total *= 0.9;
     }
 
     return total;
@@ -61,7 +61,7 @@ const BookingForm = ({ onConfirm }) => {
   );
 };
 
-// Add prop validation
+
 BookingForm.propTypes = {
   onConfirm: PropTypes.func.isRequired,
 };
