@@ -1,41 +1,91 @@
-import { useState } from 'react';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 
-const BookingForm = ({ onConfirm }) => {
-  const [membership, setMembership] = useState('Basic');
+const BookingForm = ({ desks, onBook }) => {
+  const [deskId, setDeskId] = useState("");
   const [hours, setHours] = useState(1);
-
-  const calculatePrice = () => {
-    // Example logic: price based on membership and hours
-    const basePrice = membership === 'Premium' ? 1125 : 1000;
-    const discount = membership === 'Premium' ? 0.1 : 0;
-    return basePrice * hours * (1 - discount);
-  };
+  const [membershipType, setMembershipType] = useState("basic");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const total = calculatePrice();
-    if (typeof onConfirm === 'function') {
-      onConfirm(total);  // Ensure onConfirm is called only if it is a function
+    const desk = desks.find((desk) => desk.id === Number(deskId));
+
+    if (!desk) {
+      alert("Invalid desk ID");
+      return;
     }
-    alert(`Booking Confirmed! Total Cost: ₦${total.toFixed(2)}`);
+
+    if (desk.booked) {
+      alert("Desk is already booked");
+      return;
+    }
+
+    onBook(Number(deskId), Number(hours), membershipType);
+    setDeskId("");
+    setHours(1);
+    setMembershipType("basic");
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Membership:
-        <select value={membership} onChange={(e) => setMembership(e.target.value)}>
-          <option value="Basic">Basic</option>
-          <option value="Premium">Premium</option>
-        </select>
-      </label>
-      <label>
-        Hours:
-        <input type="number" value={hours} onChange={(e) => setHours(Number(e.target.value))} />
-      </label>
-      <button type="submit">Confirm Booking</button>
-    </form>
+    <section className="p-4 my-4 bg-white rounded shadow">
+      <h2 className="mb-2 text-lg font-bold">Book a Desk</h2>
+      <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+        <div>
+          <label className="block mb-1">Desk ID:</label>
+          <input
+            type="number"
+            min="1"
+            max="15"
+            value={deskId}
+            onChange={(e) => setDeskId(e.target.value)}
+            className="w-full p-2 border rounded"
+            required
+          />
+        </div>
+        <div>
+          <label className="block mb-1">Hours:</label>
+          <input
+            type="number"
+            min="1"
+            value={hours}
+            onChange={(e) => setHours(e.target.value)}
+            className="w-full p-2 border rounded"
+            required
+          />
+        </div>
+        <div>
+          <label className="block mb-1">Membership Type:</label>
+          <select
+            value={membershipType}
+            onChange={(e) => setMembershipType(e.target.value)}
+            className="w-full p-2 border rounded"
+          >
+            <option value="basic">Basic ($10/hr)</option>
+            <option value="premium">Premium ($15/hr)</option>
+            <option value="executive">Executive ($20/hr)</option>
+          </select>
+        </div>
+        <button
+          type="submit"
+          className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+        >
+          Book Now
+        </button>
+      </form>
+    </section>
   );
+};
+
+// Prop validation
+BookingForm.propTypes = {
+  desks: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      type: PropTypes.oneOf(["individual", "team"]).isRequired,
+      booked: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
+  onBook: PropTypes.func.isRequired,
 };
 
 export default BookingForm;
